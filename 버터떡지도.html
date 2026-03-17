@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>버터떡 지도 🧈</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Apple SD Gothic Neo', sans-serif; background: #fff8f0; }
+
+    header {
+      background: #ff6b35;
+      color: white;
+      padding: 16px 20px;
+      text-align: center;
+    }
+    header h1 { font-size: 24px; }
+    header p { font-size: 14px; margin-top: 4px; opacity: 0.9; }
+
+    #map { width: 100%; height: 60vh; }
+
+    .coupang-banner {
+      background: #fff;
+      border: 2px solid #ff6b35;
+      border-radius: 12px;
+      margin: 16px;
+      padding: 16px;
+      text-align: center;
+    }
+    .coupang-banner p { font-size: 13px; color: #888; margin-bottom: 8px; }
+    .coupang-banner a {
+      display: inline-block;
+      background: #ff6b35;
+      color: white;
+      padding: 10px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .report-btn {
+      display: block;
+      margin: 0 16px 16px;
+      background: #fff;
+      border: 2px solid #ff6b35;
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+      color: #ff6b35;
+      font-weight: bold;
+      text-decoration: none;
+      font-size: 15px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 16px;
+      font-size: 12px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🧈 버터떡 지도</h1>
+    <p>전국 버터떡 맛집을 한눈에!</p>
+  </header>
+
+  <div id="map"></div>
+
+  <div class="coupang-banner">
+    <p>집에서 만들어보고 싶다면?</p>
+    <a href="여기에_쿠팡파트너스_링크" target="_blank">
+      🛒 버터떡 재료 쿠팡에서 보기
+    </a>
+  </div>
+
+  <a class="report-btn" href="여기에_구글폼_링크" target="_blank">
+    📍 우리 동네 버터떡 가게 제보하기
+  </a>
+
+  <footer>
+    © 2025 버터떡지도 · 제보 및 문의는 제보하기 버튼을 이용해주세요
+  </footer>
+
+  <script type="text/javascript"
+    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c7f7199182fb3757dbb8e5f9f0e0db1e&libraries=services">
+  </script>
+
+  <script>
+    var container = document.getElementById('map');
+    var options = {
+      center: new kakao.maps.LatLng(37.5665, 126.9780),
+      level: 7
+    };
+    var map = new kakao.maps.Map(container, options);
+
+    var places = new kakao.maps.services.Places();
+    places.keywordSearch('버터떡', function(result, status) {
+      if (status === kakao.maps.services.Status.OK) {
+        result.forEach(function(place) {
+          var marker = new kakao.maps.Marker({
+            map: map,
+            position: new kakao.maps.LatLng(place.y, place.x)
+          });
+          var infowindow = new kakao.maps.InfoWindow({
+            content: '<div style="padding:8px;font-size:13px;max-width:200px">' +
+              '<b>' + place.place_name + '</b><br>' +
+              place.address_name + '</div>'
+          });
+          kakao.maps.event.addListener(marker, 'click', function() {
+            infowindow.open(map, marker);
+          });
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>
